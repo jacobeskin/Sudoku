@@ -1,0 +1,13 @@
+# -*-makefile-*-
+
+Sudoku.exe: mtfort90.o Sudoku.o
+	gfortran -Wall -g -o Sudoku.exe mtfort90.o Sudoku.o
+
+mtfort90.o: mtfort90.f90
+	gfortran -g -c mtfort90.f90
+
+Sudoku.o: Sudoku.f90
+	gfortran  -g -c -Wall -fcheck=all Sudoku.f90
+
+clean:
+	rm -f *.o 

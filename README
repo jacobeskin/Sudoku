@@ -1,0 +1,47 @@
+Brute force sudoku solver! Solves the puzzle by simulated annealing.
+
+compilation: make -f makesudoku
+
+The program is run the usual way, ./Sudoku.exe, and it asks for the name of
+the text file that has the puzzle and the name of the file it will create for
+the solution. The program prints out the status of the solver at regular
+intervals, giving the value of the parameter "counter" that is being 
+minimized, runtime up to that point and number of steps. When the solution is 
+found (counter reaches 0) the same information is printed out.
+
+As the puzzle is being read in by the program, it counts all the free "writable"
+slots for each subregion (the 3x3 grids) and assigns an array of derived data 
+types for each subregion individually, the length of the arrays being the 
+number of empty slots in that subregion. Then it assigns a random integer
+between 1 and 9 at each empty slot, and counts the total number of mistakes
+in the puzzle into a variable "counter_0" (mistakes being dublicate numbers in
+rows/columns and in the subregions, e.g. if there are three 9's in one row,
+that counts as 2 mistakes). The initial "temperature" is set at 1000 and the 
+simulated annealing process first lowers it linearly to almost zero in
+one million steps and then rising it up to 90% of the previous starting 
+"temperature". This is continued until the "counter" variable reaches zero or
+it seems like it has hit a wall, being the same after multiple millions of 
+iterations. A change of state is done by first generating a random integer
+from 1 to 9 in order to choose the subregion, and after this a random integer 
+between 1 and the number of empty initial slots depending on the subregion.
+Then as the writable slot has been randomly chosen, the number in it is 
+changed also randomly. After this the counter is calculated again and 
+compared to "counter_0", and the new state is accepted or rejected in the
+usual way for simulated annealing routines. 
+
+The code is not pretty, I tried to write enough commnetary to make it readable.
+It is as brute force as I can imagine, there is no other logic solving the
+puzzles except choosing to change only the numbers that are in the slots that
+were empty in the beginning, as is done when solving sudoku manually.  
+
+The code was able to calculate solutions for all 4 normal puzzles and for 
+the pretty hard puzzle, but for both really hard puzzles there where constantly 
+4 mistakes in the solutions so those runs never finished. 
+
+For sudoku1 the solution was reached between 82 and 84 million steps.
+For sudoku2 the solution was reached between 83 and 85 million steps.
+For sudoku3 the solution was reached between 83 and 85 million steps.
+For sudoku4 the solution was reached between 84 and 86 million steps.
+The pretty hard sudoku took a little over 84 million steps, but I tried it 
+only once. The really hard sudokus became stuck at counter = 4 each time I 
+ran them.
